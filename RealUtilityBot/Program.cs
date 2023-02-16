@@ -27,7 +27,7 @@ namespace RealUtilityBot
 
         static void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("6034111765:AAGQiXxX2N14HE0sg04v1JOdrAUovVA-648"));
+            services.AddSingleton<ITelegramBotClient>(provider => new TelegramBotClient("token"));
             services.AddHostedService<Bot>();
         }
     }
