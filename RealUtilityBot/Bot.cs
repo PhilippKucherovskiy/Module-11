@@ -42,23 +42,26 @@ namespace RealUtilityBot
         
         async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            var message = update.Message;
+            var chatId = message.Chat.Id;
+
             if (update?.Type != UpdateType.Message || update.Message == null)
                 return;
 
             if (_currentMode == BotMode.SymbolCountMode)
             {
-                await INumberSummator.Sum(update.Message);
+
+                await ICharacterCounter.Count(botClient, message.Chat.Id, message.Text);
                 return;
             }
 
             if (_currentMode == BotMode.SumCalculationMode)
             {
-                await ICharacterCounter.Count(update.Message);
+                await INumberSummator.Sum(botClient, message.Chat.Id, message.Text);
                 return;
             }
 
-            var message = update.Message;
-            var chatId = message.Chat.Id;
+           
 
             if (message.Text == "/start")
             {
@@ -75,7 +78,7 @@ namespace RealUtilityBot
             {
                 var replyKeyboard = new ReplyKeyboardMarkup(new[] {
                 new KeyboardButton("Подсчет символов"),
-                new KeyboardButton("Случайное слово"),});
+                new KeyboardButton("Посчитать сумму"),});
             }
         }
         private Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
